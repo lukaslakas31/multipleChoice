@@ -2,15 +2,14 @@
     <div class="container"> 
         <h1> Quiz<span>dom</span></h1>
         <div>
-        <button @click="startQuiz">Start</button>
-        <button @click="showHelp">Help</button>
+        <b-button @click="startQuiz">Start</b-button>
+        <b-button @click="showHelp">Help</b-button>
         <div v-if="helpVisible" class="help-box">
             <p> How to Play: </p>
             <ul>
-            <li>Select an answer from the options provided</li>
-            <li>Click the "Next" button to move to the next question</li>
+            <li>Read the questions carefully</li>
+            <li>Click the best answer of the question</li>
             <li>Repeat until you've answered all the questions</li>
-            <li>Click the "Submit" button to see your score</li>
           </ul>
         </div>
       </div>
