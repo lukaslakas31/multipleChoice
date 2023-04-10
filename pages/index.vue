@@ -1,5 +1,5 @@
 <template>
-  <multipleChoice/>
+  <multipleChoice/> 
   </template>
   
   <script>
