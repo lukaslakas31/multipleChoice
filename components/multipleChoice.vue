@@ -9,10 +9,10 @@
       </b-row>
       <b-row>
         <b-col>
-          <b-button class="playButton" @click="mainMenu = true">Play</b-button>
+          <b-button class="playButton" @click="mainMenu = true">START</b-button>
         </b-col>
         <b-col>
-          <b-button class="howButton" @click="showHow = true">How</b-button>
+          <b-button class="howButton" @click="showHow = true">HELP</b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -66,7 +66,7 @@ export default {
             { text: "8", correct: true },
             { text: "16", correct: false },
           ]
-        }
+        },
         // add questions
       ],
       currentQuestionIndex: 0,
