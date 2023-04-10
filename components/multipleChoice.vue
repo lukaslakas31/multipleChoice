@@ -36,6 +36,7 @@
       <!-- modal score area -->
       <b-modal v-model="showScore" title="Score" hide-footer hide-header-close  no-close-on-esc no-close-on-backdrop >
         <p>You got {{ score }} out of {{ questions.length }} questions correct!</p>
+        <b-button class="menuButton" @click="backMenu">Main Menu</b-button>
       </b-modal>
     </b-container>
   </div>
@@ -107,6 +108,13 @@ export default {
         this.currentQuestionIndex++;
 
       }
+    },
+    backMenu () {
+      this.mainMenu = false;
+      this.showScore = false;
+      this.currentQuestionIndex = 0;
+      this.score = 0;
+      this.selectedAnswer = null;
     }
   }
 };
