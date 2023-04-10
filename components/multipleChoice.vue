@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- main menu area  -->
     <b-container v-if="!mainMenu">
       <b-row>
         <b-col>
@@ -8,29 +9,32 @@
       </b-row>
       <b-row>
         <b-col>
-          <b-button @click="mainMenu = true">Play</b-button>
+          <b-button class="playButton" @click="mainMenu = true">Play</b-button>
         </b-col>
         <b-col>
-          <b-button @click="showHow = true">How</b-button>
+          <b-button class="howButton" @click="showHow = true">How</b-button>
         </b-col>
       </b-row>
     </b-container>
     <b-modal v-model="showHow" title="How to Play" hide-footer>
       <p> Choose the best answer in every question! </p>
     </b-modal>
+    <!-- question area  -->
     <b-container v-if="mainMenu">
       <div v-if="!showScore">
         <h3>{{currentQuestionNumber}} / {{questions.length}} {{ currentQuestion.question }}</h3>
         <div v-for="(answer, answerIndex) in currentQuestion.answers" :key="answerIndex">
-          <b-button @click="checkAnswer(answer)">{{ answer.text }}</b-button>
+          <b-button class="choiceButton" @click="checkAnswer(answer)">{{ answer.text }}</b-button>
         </div>
+        <!-- modal correct/wrong area  -->
         <b-modal v-model="showAnswer" title="Answer" hide-footer hide-header-close  no-close-on-esc no-close-on-backdrop>
           <p v-if="isCorrectAnswer">Correct!</p>
           <p v-else>Incorrect!</p>
           <b-button @click="nextQuestion">Next</b-button>
         </b-modal>
       </div>
-      <b-modal v-model="showScore" title="Score" hide-footer >
+      <!-- modal score area -->
+      <b-modal v-model="showScore" title="Score" hide-footer hide-header-close  no-close-on-esc no-close-on-backdrop >
         <p>You got {{ score }} out of {{ questions.length }} questions correct!</p>
       </b-modal>
     </b-container>
