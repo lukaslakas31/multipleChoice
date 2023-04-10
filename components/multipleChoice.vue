@@ -1,37 +1,42 @@
 <template>
   <div>
+    <!-- main menu area  -->
     <b-container v-if="!mainMenu">
       <b-row>
         <b-col>
-          <H1> Multiple Choice Quiz </H1>
+          <h1> Multiple Choice Quiz </h1>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
-          <b-button @click="mainMenu = true">Play</b-button>
+          <b-button class="playButton" @click="mainMenu = true">START</b-button>
         </b-col>
         <b-col>
-          <b-button @click="showHow = true">How</b-button>
+          <b-button class="howButton" @click="showHow = true">HELP</b-button>
         </b-col>
       </b-row>
     </b-container>
     <b-modal v-model="showHow" title="How to Play" hide-footer>
       <p> Choose the best answer in every question! </p>
     </b-modal>
+    <!-- question area  -->
     <b-container v-if="mainMenu">
-      <div v-if="!showScore">
+      <div v-if="!quizGame">
         <h3>{{currentQuestionNumber}} / {{questions.length}} {{ currentQuestion.question }}</h3>
         <div v-for="(answer, answerIndex) in currentQuestion.answers" :key="answerIndex">
-          <b-button @click="checkAnswer(answer)">{{ answer.text }}</b-button>
+          <b-button class="choiceButton" @click="checkAnswer(answer)">{{ answer.text }}</b-button>
         </div>
+        <!-- modal correct/wrong area  -->
         <b-modal v-model="showAnswer" title="Answer" hide-footer hide-header-close  no-close-on-esc no-close-on-backdrop>
           <p v-if="isCorrectAnswer">Correct!</p>
           <p v-else>Incorrect!</p>
           <b-button @click="nextQuestion">Next</b-button>
         </b-modal>
       </div>
-      <b-modal v-model="showScore" title="Score" hide-footer >
-        <p>You got {{ score }} out of {{ questions.length }} questions correct!</p>
+      <!-- modal score area -->
+      <b-modal v-model="quizGame" title="Done!" hide-footer hide-header-close  no-close-on-esc no-close-on-backdrop >
+        <p>Score: {{ score }} out of {{ questions.length }}</p>
+        <b-button class="menuButton" @click="backMenu">Main Menu</b-button>
       </b-modal>
     </b-container>
   </div>
@@ -42,6 +47,7 @@ export default {
   data() {
     return {
       mainMenu: false,
+      quizGame: false,
       showHow: false,
       showAnswer: false,
       questions: [
@@ -51,7 +57,6 @@ export default {
             { text: "Open Software", correct: false },
             { text: "Operating System", correct: true },
             { text: "Optical Sensor", correct: false },
-            { text: "Order Significance", correct: false }
           ]
         },
         {
@@ -60,9 +65,8 @@ export default {
             { text: "4", correct: false },
             { text: "8", correct: true },
             { text: "16", correct: false },
-            { text: "32", correct: false }
           ]
-        }
+        },
         // add questions
       ],
       currentQuestionIndex: 0,
@@ -98,11 +102,18 @@ export default {
       this.showAnswer = false;
       this.selectedAnswer = null;
       if (this.currentQuestionIndex === this.questions.length - 1) {
-        this.showScore = true;
+        this.quizGame = true;
       } else {
         this.currentQuestionIndex++;
 
       }
+    },
+    backMenu () {
+      this.mainMenu = false;
+      this.quizGame = false;
+      this.currentQuestionIndex = 0;
+      this.score = 0;
+      this.selectedAnswer = null;
     }
   }
 };
