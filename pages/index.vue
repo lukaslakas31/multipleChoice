@@ -1,9 +1,11 @@
 <template>
+  <multipleChoice/> 
+  </template>
   
-</template>
+  <script>
 
-<script>
-export default {
-  name: 'IndexPage'
-}
-</script>
+  </script>
+  
+  <style>
+
+  </style>
