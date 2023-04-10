@@ -16,7 +16,7 @@
         </b-col>
       </b-row>
     </b-container>
-    <b-modal v-model="showHow" title="How to Play" hide-footer>
+    <b-modal v-model="showHow" title="How to Play" hide-footer no-close-on-esc no-close-on-backdrop>
       <p> Choose the best answer in every question! </p>
     </b-modal>
     <!-- question area  -->
