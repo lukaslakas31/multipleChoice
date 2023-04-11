@@ -17,6 +17,7 @@
         <div class="tops">
           <h3 class="qnum">{{currentQuestionNumber}} / {{questions.length}} </h3>
           <i class="fa-solid fa-clock"></i>
+          <p class="timer">{{ timeLeft }}</p>
         </div>
           <div class="qanda">
               <h3 class="quest">{{ currentQuestion.question }}</h3>
@@ -54,7 +55,11 @@ export default {
       currentQuestionIndex: 0,
       score: 0,
       selectedAnswer: null,
+      timeLeft: 10,
     };
+  },
+  mounted () {
+    this.startTimer();
   },
   computed: {
     currentQuestion() {
@@ -73,6 +78,19 @@ export default {
     }
   },
   methods: {
+    startTimer() {
+      this.timerId = setInterval(() => {
+        if (this.timeLeft === 0) {
+            clearInterval(this.timerId);
+            this.checkAnswer(null);
+            return;
+      }
+      this.timeLeft--;
+      }, 1000);
+    },
+    stopTimer() {
+      clearInterval(this.timerId);
+    },
     checkAnswer(answer) {
       this.showAnswer = true;
       this.selectedAnswer = answer;
@@ -81,21 +99,30 @@ export default {
       }
     },
     nextQuestion() {
+      this.stopTimer();
       this.showAnswer = false;
       this.selectedAnswer = null;
       if (this.currentQuestionIndex === this.questions.length - 1) {
         this.quizGame = true;
       } else {
         this.currentQuestionIndex++;
+        this.startTimer();
+        this.timeLeft = 10;
 
       }
     },
     backMenu () {
+      this.stopTimer();
       this.mainMenu = false;
       this.quizGame = false;
       this.currentQuestionIndex = 0;
       this.score = 0;
       this.selectedAnswer = null;
+      clearInterval(this.timerId);
+      this.showAnswer = false;
+      this.timeLeft = 10;
+      this.startTimer();
+
     }
   }
 };
