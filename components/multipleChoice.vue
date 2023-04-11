@@ -8,7 +8,7 @@
           <b-button class="playButton" @click="mainMenu = true">START</b-button>
           <b-button class="howButton" @click="showHow = true">HELP</b-button>
     </div>
-    <b-modal v-model="showHow" title="How to Play" hide-footer>
+    <b-modal v-model="showHow" title="How to Play" hide-footer >
       <p> Choose the best answer in every question! </p>
     </b-modal>
     <!-- question area  -->
@@ -21,15 +21,16 @@
           <div class="qanda">
               <h3 class="quest">{{ currentQuestion.question }}</h3>
               <div class="choices">
-              <div v-for="(answer, answerIndex) in currentQuestion.answers" :key="answerIndex">
-                <b-button class="choiceButton" :id="answerIndex" @click="checkAnswer(answer)">{{ answer.text }}</b-button>
-              </div>
+                <div v-for="(answer, answerIndex) in currentQuestion.answers" :key="answerIndex">
+                  <b-button class="choiceButton" :class="'answer'+answerIndex" :id="answerIndex" @click="checkAnswer(answer)">{{ answer.text }}</b-button>
+                </div>
               <!-- modal correct/wrong area  -->
-                <b-modal class="result" v-model="showAnswer" title="Answer" hide-footer hide-header-close  no-close-on-esc no-close-on-backdrop>
-                  <p v-if="isCorrectAnswer">Correct!</p>
-                  <p v-else>Incorrect!</p>
-                  <b-button @click="nextQuestion">Next</b-button>
-                </b-modal>
+              <b-modal class="result" v-model="showAnswer" title="Answer" hide-footer hide-header-close  no-close-on-esc no-close-on-backdrop>
+                <p v-if="isCorrectAnswer">Correct!</p>
+                <p v-else>Incorrect!</p>
+                <b-button @click="nextQuestion">Next</b-button>
+              </b-modal>
+
           </div>
         </div>
       </div>
@@ -237,20 +238,28 @@ export default {
   }
 
   .qanda .choices{
-    border: solid rgb(5, 207, 73);
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     width: 100%;
     margin-top: 100px;
   }
-
-  #answerIndex{
+ 
+  .choiceButton{
     font-size: 50px;
+    width: 600px;
+    height: 400px;
+  }
+  .choiceButton.answer0 {
+   background-color: #FFA500; /* set background color for choice 0 */
+  }
+  .choiceButton.answer1 {
+   background-color: #6495ED; /* set background color for choice 1 */
+  }
+  .choiceButton.answer2 {
+   background-color: #FF69B4; /* set background color for choice 2 */
   }
 
-  .modal-dialog {
-    background-color: #393937;
-  }
+  
 
 </style>
