@@ -113,17 +113,16 @@ export default {
       }
     },
     backMenu () {
-      this.stopTimer();
       this.mainMenu = false;
       this.quizGame = false;
       this.currentQuestionIndex = 0;
       this.score = 0;
       this.selectedAnswer = null;
+      this.stopTimer();
       clearInterval(this.timerId);
       this.showAnswer = false;
       this.timeLeft = 10;
       this.startTimer();
-
     }
   }
 };
