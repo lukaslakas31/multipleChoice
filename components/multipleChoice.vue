@@ -23,12 +23,12 @@
               <h3 class="quest">{{ currentQuestion.question }}</h3>
               <div class="choices">
                 <div v-for="(answer, answerIndex) in currentQuestion.answers" :key="answerIndex">
-                  <b-button class="choiceButton" :class="'answer'+answerIndex" :id="answerIndex" @click="checkAnswer(answer)">{{ answer.text }}</b-button>
+                  <b-button class="choiceButton" :class="'answer'+answerIndex" :id="answerIndex" @click="checkAnswer(answerIndex)">{{ answer.text }}</b-button>
                 </div>
               <!-- modal correct/wrong area  -->
               <b-modal class="result" v-model="showAnswer" title="Answer" hide-footer hide-header-close  no-close-on-esc no-close-on-backdrop>
-                <p v-if="isCorrectAnswer">Correct!</p>
-                <p v-else>Incorrect!</p>
+                <p v-if="this.isCorrect">Correct!</p>
+                <p v-else-if="!this.isCorrect">Incorrect!</p>
                 <b-button @click="nextQuestion">Next</b-button>
               </b-modal>
 
@@ -57,6 +57,7 @@ export default {
       score: 0,
       selectedAnswer: null,
       timeLeft: 10,
+      isCorrect: false,
     };
   },
   watch: {
@@ -78,14 +79,7 @@ export default {
     currentQuestionNumber () {
       return this.currentQuestionIndex + 1;
     },
-    isCorrectAnswer() {
-      const selectedAnswer = this.selectedAnswer;
-      if (!selectedAnswer) {
-        return false;
-      }
-      const correctAnswer = this.currentQuestion.answers.find(answer => answer.correct === true);
-      return selectedAnswer === correctAnswer;
-    }
+
   },
   methods: {
     startTimer() {
@@ -105,10 +99,10 @@ export default {
     stopTimer() {
       clearInterval(this.timerId);
     },
-    checkAnswer(answer) {
+    checkAnswer(answerID) {
+      this.isCorrect = this.questions[this.currentQuestionIndex].answers[answerID].correct;
       this.showAnswer = true;
-      this.selectedAnswer = answer;
-      if (answer.correct) {
+      if (this.isCorrect) {
         this.score++;
       }
       this.stopTimer();

@@ -10,8 +10,8 @@
         {
           question: "'OS' Computer abbreviation usually means?",
           answers: [
-            { text: "Open Software", correct: false },
             { text: "Operating System", correct: true },
+            { text: "Open Software", correct: false },
             { text: "Optical Sensor", correct: false },
           ]
         },
