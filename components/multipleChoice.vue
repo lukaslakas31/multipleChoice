@@ -1,78 +1,66 @@
 <template>
-  <div>
+  <div class="content">
     <!-- main menu area  -->
-    <b-container v-if="!mainMenu">
-      <b-row>
-        <b-col>
-          <h1> Multiple Choice Quiz </h1>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
+    <div class="main" v-if="!mainMenu">
+          <h1 id="title">
+            <span class="quiz-text">Quiz</span>Dom
+          </h1>
           <b-button class="playButton" @click="mainMenu = true">START</b-button>
-        </b-col>
-        <b-col>
           <b-button class="howButton" @click="showHow = true">HELP</b-button>
-        </b-col>
-      </b-row>
-    </b-container>
-    <b-modal v-model="showHow" title="How to Play" hide-footer>
+    </div>
+    <b-modal v-model="showHow" title="How to Play" hide-footer >
       <p> Choose the best answer in every question! </p>
     </b-modal>
     <!-- question area  -->
-    <b-container v-if="mainMenu">
-      <div v-if="!quizGame">
-        <h3>{{currentQuestionNumber}} / {{questions.length}} {{ currentQuestion.question }}</h3>
-        <div v-for="(answer, answerIndex) in currentQuestion.answers" :key="answerIndex">
-          <b-button class="choiceButton" @click="checkAnswer(answer)">{{ answer.text }}</b-button>
+    <div class="question" v-if="mainMenu">
+      <div class="questionpart" v-if="!quizGame">
+        <div class="tops">
+          <h3 class="qnum">{{currentQuestionNumber}} / {{questions.length}} </h3>
+          <i class="fa-solid fa-clock"></i>
+          <p class="timer">{{ timeLeft }}</p>
         </div>
-        <!-- modal correct/wrong area  -->
-        <b-modal v-model="showAnswer" title="Answer" hide-footer hide-header-close  no-close-on-esc no-close-on-backdrop>
-          <p v-if="isCorrectAnswer">Correct!</p>
-          <p v-else>Incorrect!</p>
-          <b-button @click="nextQuestion">Next</b-button>
-        </b-modal>
+          <div class="qanda">
+              <h3 class="quest">{{ currentQuestion.question }}</h3>
+              <div class="choices">
+                <div v-for="(answer, answerIndex) in currentQuestion.answers" :key="answerIndex">
+                  <b-button class="choiceButton" :class="'answer'+answerIndex" :id="answerIndex" @click="checkAnswer(answer)">{{ answer.text }}</b-button>
+                </div>
+              <!-- modal correct/wrong area  -->
+              <b-modal class="result" v-model="showAnswer" title="Answer" hide-footer hide-header-close  no-close-on-esc no-close-on-backdrop>
+                <p v-if="isCorrectAnswer">Correct!</p>
+                <p v-else>Incorrect!</p>
+                <b-button @click="nextQuestion">Next</b-button>
+              </b-modal>
+
+          </div>
+        </div>
       </div>
       <!-- modal score area -->
       <b-modal v-model="quizGame" title="Done!" hide-footer hide-header-close  no-close-on-esc no-close-on-backdrop >
         <p>Score: {{ score }} out of {{ questions.length }}</p>
         <b-button class="menuButton" @click="backMenu">Main Menu</b-button>
       </b-modal>
-    </b-container>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  props:['questions'],
   data() {
     return {
       mainMenu: false,
       quizGame: false,
       showHow: false,
       showAnswer: false,
-      questions: [
-        {
-          question: "'OS' Computer abbreviation usually means?",
-          answers: [
-            { text: "Open Software", correct: false },
-            { text: "Operating System", correct: true },
-            { text: "Optical Sensor", correct: false },
-          ]
-        },
-        {
-          question: "How many bits is a byte?",
-          answers: [
-            { text: "4", correct: false },
-            { text: "8", correct: true },
-            { text: "16", correct: false },
-          ]
-        },
-        // add questions
-      ],
       currentQuestionIndex: 0,
       score: 0,
       selectedAnswer: null,
+      timeLeft: 10,
     };
+  },
+  mounted () {
+    this.startTimer();
   },
   computed: {
     currentQuestion() {
@@ -91,6 +79,19 @@ export default {
     }
   },
   methods: {
+    startTimer() {
+      this.timerId = setInterval(() => {
+        if (this.timeLeft === 0) {
+            clearInterval(this.timerId);
+            this.checkAnswer(null);
+            return;
+      }
+      this.timeLeft--;
+      }, 1000);
+    },
+    stopTimer() {
+      clearInterval(this.timerId);
+    },
     checkAnswer(answer) {
       this.showAnswer = true;
       this.selectedAnswer = answer;
@@ -99,12 +100,15 @@ export default {
       }
     },
     nextQuestion() {
+      this.stopTimer();
       this.showAnswer = false;
       this.selectedAnswer = null;
       if (this.currentQuestionIndex === this.questions.length - 1) {
         this.quizGame = true;
       } else {
         this.currentQuestionIndex++;
+        this.startTimer();
+        this.timeLeft = 10;
 
       }
     },
@@ -114,11 +118,156 @@ export default {
       this.currentQuestionIndex = 0;
       this.score = 0;
       this.selectedAnswer = null;
+      this.stopTimer();
+      clearInterval(this.timerId);
+      this.showAnswer = false;
+      this.timeLeft = 10;
+      this.startTimer();
     }
   }
 };
 </script>
 
 <style>
+  html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #461a42;
+}
+
+.main{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  display: flex;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  gap: 80px;
+}
+
+#title {
+  font-family: cursive;
+  font-weight: 400;
+  font-size: 150px;
+  color: #eca82c;
+  text-align: center;
+  line-height: 0.8;
+}
+
+  .quiz-text {
+    color: #FFFFFF;
+  }
+
+  .playButton{
+    color: white;
+    background-color: rgb(21, 199, 113);
+    font-size: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 17px 0px 0px rgb(77, 115, 138);
+    border: none;
+    padding: 5px 25px;
+    cursor: pointer;
+    letter-spacing: 3px;
+  }
+
+  .playButton:hover{
+    background-color: rgb(14, 169, 94);
+  }
+
+  .playButton:active{
+    transform: translateY(7px);
+    box-shadow: 0px 10px 0px 0px rgb(67, 88, 93);
+  }
+  .howButton{
+    color: white;
+    background-color: rgb(21, 199, 113);
+    font-size: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 17px 0px 0px rgb(77, 115, 138);
+    border: none;
+    padding: 5px 25px;
+    cursor: pointer;
+    letter-spacing: 3px;
+  }
+
+  .howButton:hover{
+    background-color: rgb(14, 169, 94);
+  }
+
+  .howButton:active{
+    transform: translateY(7px);
+    box-shadow: 0px 10px 0px 0px rgb(67, 88, 93);
+  }
+
+  .question{
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+  }
+
+  .tops{
+    display: flex;
+    justify-content: space-between;
+    margin: 15px;
+  }
+
+  .qnum{
+    color:#FFFFFF;
+    font-size: 40px;
+  }
+
+  i{
+    font-size: 80px;
+    border: solid #FFFFFF;
+    border-radius: 50%;
+  }
+
+  .quest{
+    display: flex;
+    justify-content: center;
+    color: #FFFFFF;
+    font-size: 50px;
+  }
+
+  .qanda{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 85vh;
+    gap: 100px;
+  }
+
+  .qanda .choices{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 100px;
+  }
+ 
+  .choiceButton{
+    font-size: 50px;
+    width: 600px;
+    height: 400px;
+  }
+  .choiceButton.answer0 {
+   background-color: #FFA500; /* set background color for choice 0 */
+  }
+  .choiceButton.answer1 {
+   background-color: #6495ED; /* set background color for choice 1 */
+  }
+  .choiceButton.answer2 {
+   background-color: #FF69B4; /* set background color for choice 2 */
+  }
+
+  
 
 </style>
