@@ -8,41 +8,45 @@
           <b-button class="playButton" @click="mainMenu = true">START</b-button>
           <b-button class="howButton" @click="showHow = true">HELP</b-button>
     </div>
-    <b-modal v-model="showHow" title="How to Play" hide-footer >
-      <p> Choose the best answer in every question! </p>
+    <b-modal v-model="showHow" title="How to Play" ok-only centered size="m" header-bg-variant="dark" header-text-variant="light"  body-bg-variant="dark" body-text-variant="light" footer-bg-variant="dark" footer-text-variant="light">
+      <p id="howGame"> Choose the best answer in every question! </p>
     </b-modal>
+
+
     <!-- question area  -->
     <div class="question" v-if="mainMenu">
       <div class="questionpart" v-if="!quizGame">
         <div class="tops">
           <h3 class="qnum">{{currentQuestionNumber}} / {{questions.length}} </h3>
-          <i class="fa-solid fa-clock"></i>
-          <p class="timer">{{ timeLeft }}</p>
+          
+          <p class="timer">{{ timeLeft }}<i class="fa-solid fa-clock"></i></p>
         </div>
           <div class="qanda">
               <h3 class="quest">{{ currentQuestion.question }}</h3>
               <div class="choices">
                 <div v-for="(answer, answerIndex) in currentQuestion.answers" :key="answerIndex">
-                  <b-button class="choiceButton" :class="'answer'+answerIndex" :id="answerIndex" @click="checkAnswer(answer)">{{ answer.text }}</b-button>
+                  <b-button class="choiceButton" :class="'answer'+answerIndex" :id="answerIndex" @click="checkAnswer(answerIndex)">{{ answer.text }}</b-button>
                 </div>
               <!-- modal correct/wrong area  -->
-              <b-modal class="result" v-model="showAnswer" title="Answer" hide-footer hide-header-close  no-close-on-esc no-close-on-backdrop>
-                <p v-if="isCorrectAnswer">Correct!</p>
-                <p v-else>Incorrect!</p>
-                <b-button @click="nextQuestion">Next</b-button>
+              <b-modal class="result" v-model="showAnswer" title="Answer" hide-footer hide-header-close no-close-on-esc no-close-on-backdrop size="lg" centered header-bg-variant="dark" header-text-variant="light"  body-bg-variant="dark" body-text-variant="light">
+                <div class="ansResult">
+                  <p v-if="this.isCorrect">Correct!<br><i class="fa-solid fa-square-check" id="corIcon" style="color: #13cd1f;"></i></p>
+                  <p v-else-if="!this.isCorrect">Incorrect!<br><i class="fa-solid fa-square-xmark" id="wroIcon" style="color: #e33131;"></i></p>
+                  <b-button @click="nextQuestion">Next Question</b-button>
+                </div>
               </b-modal>
-
           </div>
         </div>
       </div>
       <!-- modal score area -->
-      <b-modal v-model="quizGame" title="Done!" hide-footer hide-header-close  no-close-on-esc no-close-on-backdrop >
+      <b-modal v-model="quizGame" title="Done!" hide-footer hide-header-close  no-close-on-esc no-close-on-backdrop centered header-bg-variant="dark" header-text-variant="light"  body-bg-variant="dark" body-text-variant="light" >
         <p>Score: {{ score }} out of {{ questions.length }}</p>
         <b-button class="menuButton" @click="backMenu">Main Menu</b-button>
       </b-modal>
     </div>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -57,10 +61,20 @@ export default {
       score: 0,
       selectedAnswer: null,
       timeLeft: 10,
+      isCorrect: false,
     };
   },
-  mounted () {
-    this.startTimer();
+  watch: {
+    mainMenu: {
+      handler() {
+        if (this.mainMenu) {
+          this.startTimer();
+        } else {
+          this.stopTimer();
+        }
+      },
+      immediate: true,
+    }
   },
   computed: {
     currentQuestion() {
@@ -69,35 +83,42 @@ export default {
     currentQuestionNumber () {
       return this.currentQuestionIndex + 1;
     },
-    isCorrectAnswer() {
-      const selectedAnswer = this.selectedAnswer;
-      if (!selectedAnswer) {
-        return false;
-      }
-      const correctAnswer = this.currentQuestion.answers.find(answer => answer.correct === true);
-      return selectedAnswer === correctAnswer;
-    }
+
   },
   methods: {
     startTimer() {
       this.timerId = setInterval(() => {
         if (this.timeLeft === 0) {
+            this.timesUp();
             clearInterval(this.timerId);
-            this.checkAnswer(null);
             return;
+      }
+      if(!this.mainMenu) {
+        clearInterval(this.timerId);
+        return;
       }
       this.timeLeft--;
       }, 1000);
     },
+    timesUp() {
+      this.showAnswer = true;
+      this.isCorrect = false;
+      this.stopTimer();
+    },
     stopTimer() {
       clearInterval(this.timerId);
     },
-    checkAnswer(answer) {
+    checkAnswer(answerID) {
+      if (this.timeLeft === 0 ){
+        this.timesUp();
+        return;
+      }
+      this.isCorrect = this.questions[this.currentQuestionIndex].answers[answerID].correct;
       this.showAnswer = true;
-      this.selectedAnswer = answer;
-      if (answer.correct) {
+      if (this.isCorrect) {
         this.score++;
       }
+      this.stopTimer();
     },
     nextQuestion() {
       this.stopTimer();
@@ -107,9 +128,8 @@ export default {
         this.quizGame = true;
       } else {
         this.currentQuestionIndex++;
-        this.startTimer();
         this.timeLeft = 10;
-
+        this.startTimer();
       }
     },
     backMenu () {
@@ -184,7 +204,7 @@ export default {
   }
   .howButton{
     color: white;
-    background-color: rgb(21, 199, 113);
+    background-color: #474E68;
     font-size: 30px;
     border-radius: 15px;
     box-shadow: 0px 17px 0px 0px rgb(77, 115, 138);
@@ -195,12 +215,44 @@ export default {
   }
 
   .howButton:hover{
-    background-color: rgb(14, 169, 94);
+    background-color: #404258;
   }
 
   .howButton:active{
     transform: translateY(7px);
     box-shadow: 0px 10px 0px 0px rgb(67, 88, 93);
+  }
+
+  .modal-header{
+    justify-content: center;
+  }
+
+  .modal-header h5{
+    font-size: 40px;
+  }
+
+  button.close.text-light{
+    display: none;
+  }
+  
+  #howGame {
+    text-align: center;
+  }
+
+  .btn-primary {
+    color: #fff;
+    background-color: #474E68;
+    border-color: #fff;
+  }
+
+  .btn-primary:hover{
+    background-color: #474E68;
+    border-color: #fff;
+  }
+
+  .timer{
+    color:#FFFFFF;
+    font-size: 40px;
   }
 
   .question{
@@ -223,10 +275,12 @@ export default {
     font-size: 40px;
   }
 
-  i{
-    font-size: 80px;
+  .timer i{
+    font-size: 30px;
     border: solid #FFFFFF;
     border-radius: 50%;
+    margin-left: 10px;
+    margin-top: 5px;
   }
 
   .quest{
@@ -268,6 +322,41 @@ export default {
    background-color: #FF69B4; /* set background color for choice 2 */
   }
 
+  .ansResult{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 50px;
+    gap: 90px;
+  }
+
+  .ansResult p{
+    margin-top: 60px;
+  }
+
+  #corIcon{
+    font-size: 80px;
+    margin-left: 50px;
+    border: none;
+  }
+
+  #wroIcon{
+    font-size: 80px;
+    margin-left: 70px;
+    border: none;
+  }
+
+  .modal-body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+  }
+
+  .modal-body p{
+    font-size: 50px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
   
 
 </style>
