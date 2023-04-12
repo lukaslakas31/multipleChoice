@@ -80,11 +80,16 @@ export default {
   },
   methods: {
     startTimer() {
+      
       this.timerId = setInterval(() => {
         if (this.timeLeft === 0) {
             clearInterval(this.timerId);
             this.checkAnswer(null);
             return;
+      }
+      if(!this.mainMenu) {
+        clearInterval(this.timerId);
+        return;
       }
       this.timeLeft--;
       }, 1000);
@@ -98,6 +103,7 @@ export default {
       if (answer.correct) {
         this.score++;
       }
+      this.stopTimer();
     },
     nextQuestion() {
       this.stopTimer();
@@ -107,9 +113,8 @@ export default {
         this.quizGame = true;
       } else {
         this.currentQuestionIndex++;
-        this.startTimer();
         this.timeLeft = 10;
-
+        this.startTimer();
       }
     },
     backMenu () {
