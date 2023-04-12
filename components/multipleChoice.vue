@@ -85,8 +85,8 @@ export default {
     startTimer() {
       this.timerId = setInterval(() => {
         if (this.timeLeft === 0) {
+            this.timesUp();
             clearInterval(this.timerId);
-            this.checkAnswer(null);
             return;
       }
       if(!this.mainMenu) {
@@ -96,10 +96,19 @@ export default {
       this.timeLeft--;
       }, 1000);
     },
+    timesUp() {
+      this.showAnswer = true;
+      this.isCorrect = false;
+      this.stopTimer();
+    },
     stopTimer() {
       clearInterval(this.timerId);
     },
     checkAnswer(answerID) {
+      if (this.timeLeft === 0 ){
+        this.timesUp();
+        return;
+      }
       this.isCorrect = this.questions[this.currentQuestionIndex].answers[answerID].correct;
       this.showAnswer = true;
       if (this.isCorrect) {
