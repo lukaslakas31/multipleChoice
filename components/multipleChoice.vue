@@ -310,7 +310,7 @@ export default {
   .choiceButton{
     font-size: 50px;
     width: 600px;
-    height: 300px;
+    height: 400px;
   }
   .choiceButton.answer0 {
    background-color: #FFA500; /* set background color for choice 0 */
