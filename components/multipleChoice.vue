@@ -59,8 +59,17 @@ export default {
       timeLeft: 10,
     };
   },
-  mounted () {
-    this.startTimer();
+  watch: {
+    mainMenu: {
+      handler() {
+        if (this.mainMenu) {
+          this.startTimer();
+        } else {
+          this.stopTimer();
+        }
+      },
+      immediate: true,
+    }
   },
   computed: {
     currentQuestion() {
@@ -80,7 +89,6 @@ export default {
   },
   methods: {
     startTimer() {
-      
       this.timerId = setInterval(() => {
         if (this.timeLeft === 0) {
             clearInterval(this.timerId);
