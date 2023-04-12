@@ -8,9 +8,9 @@
           <b-button class="playButton" @click="mainMenu = true">START</b-button>
           <b-button class="howButton" @click="showHow = true">HELP</b-button>
     </div>
-    <b-modal v-model="showHow" title="How to Play" hide-footer >
-      <p> Choose the best answer in every question! </p>
-    </b-modal>
+      <b-modal v-model="showHow" title="How to Play" hide-footer centered size="xl">
+        <p> Choose the best answer in every question! </p>
+      </b-modal>
     <!-- question area  -->
     <div class="question" v-if="mainMenu">
       <div class="questionpart" v-if="!quizGame">
@@ -26,7 +26,7 @@
                   <b-button class="choiceButton" :class="'answer'+answerIndex" :id="answerIndex" @click="checkAnswer(answerIndex)">{{ answer.text }}</b-button>
                 </div>
               <!-- modal correct/wrong area  -->
-              <b-modal class="result" v-model="showAnswer" title="Answer" hide-footer hide-header-close  no-close-on-esc no-close-on-backdrop>
+              <b-modal class="result" v-model="showAnswer" title="Answer" hide-footer hide-header-close  no-close-on-esc no-close-on-backdrop centered>
                 <p v-if="this.isCorrect">Correct!</p>
                 <p v-else-if="!this.isCorrect">Incorrect!</p>
                 <b-button @click="nextQuestion">Next</b-button>
@@ -36,13 +36,14 @@
         </div>
       </div>
       <!-- modal score area -->
-      <b-modal v-model="quizGame" title="Done!" hide-footer hide-header-close  no-close-on-esc no-close-on-backdrop >
+      <b-modal v-model="quizGame" title="Done!" hide-footer hide-header-close  no-close-on-esc no-close-on-backdrop centered>
         <p>Score: {{ score }} out of {{ questions.length }}</p>
         <b-button class="menuButton" @click="backMenu">Main Menu</b-button>
       </b-modal>
     </div>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -200,7 +201,7 @@ export default {
   }
   .howButton{
     color: white;
-    background-color: rgb(21, 199, 113);
+    background-color: #474E68;
     font-size: 30px;
     border-radius: 15px;
     box-shadow: 0px 17px 0px 0px rgb(77, 115, 138);
@@ -211,7 +212,7 @@ export default {
   }
 
   .howButton:hover{
-    background-color: rgb(14, 169, 94);
+    background-color: #404258;
   }
 
   .howButton:active{
@@ -283,7 +284,5 @@ export default {
   .choiceButton.answer2 {
    background-color: #FF69B4; /* set background color for choice 2 */
   }
-
-  
 
 </style>
