@@ -357,6 +357,162 @@ export default {
     font-size: 50px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   }
+
+  @media only screen and (max-width:600px) {
+    html,body{
+      height: 50%;
+      margin: 100;
+      padding: 0;
+    }
+    .main{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 50px;
+    }
+    #title {
+      font-size: 50px;
+      text-align: center;
+      line-height: 0.5;
+   }
+   .playButton{
+    font-size: 20px;
+    border-radius: 10px;
+    border: none;
+    padding: 3px 10px 15px;
+    cursor: pointer;
+    letter-spacing: 2px;
+   
+   }
+   .howButton{
+    font-size: 20px;
+    border-radius: 10px;
+    border: none;
+    padding: 3px 10px;
+    cursor: pointer;
+    letter-spacing: 2px;
+  }
+  #howGame{
+    text-align: center;
+    font-size: 40px;
+    padding: 25% 15%;
+    grid-gap: 5px;
+    
+  }
+ }
+ @media screen and (max-width: 600px){
+  html,body{
+    height: 50%;
+    margin: 100;
+    padding: 0;
+  }
+  .main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+  }
+  .btn-primary {
+    margin-left: 5%;
+  }
+  .timer{
+    margin-left: 5%;
+    font-size: 35px;
+  }
+  .question{
+    height: 50%;
+    margin: 100;
+    padding: 100;
+    display: flex;
+    font-size: 50px;
+    text-align: center;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+  }
+  .qnum{
+    font-size: 35px;
+    margin-left: 0;
+
+  }
+  .timer i{
+    font-size: 25px;
+    border-radius: 40%;
+    margin-left: 5px;
+    margin-top: 2px;
+  }
+  .quest{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    font-size: 30px;
+  }
+  .qanda{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+  }
+  .qanda .choices{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 10px;
+    width: 20%;
+    margin-top: 20px;
+  }
+  .choiceButton{
+    font-size: 20px;
+    width: 200px;
+    height: 100px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    
+  }
+  .ansResult{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 35px;
+    gap: 70px;
+  }
+  .ansResult p{
+    font-size: 40px;
+    margin-top: 50px;
+    align-content: center;
+    flex-direction: column;
+  }
+  #corIcon{
+    font-size: 80px;
+    margin-left: 50px;
+    border: none;
+    align-content: center;
+  }
+
+  #wroIcon{
+    font-size: 80px;
+    margin-left: 70px;
+    border: none;
+    align-content: center;
+  }
+
+  .modal-body p{
+    font-size: 50px;
+    
+  }
+
+  
+
+  
+
+
+  
+ }
+
   
 
 </style>
