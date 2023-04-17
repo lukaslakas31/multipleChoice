@@ -60,7 +60,7 @@ export default {
       currentQuestionIndex: 0,
       score: 0,
       selectedAnswer: null,
-      timeLeft: 10,
+      timeLeft: 30,
       isCorrect: false,
     };
   },
